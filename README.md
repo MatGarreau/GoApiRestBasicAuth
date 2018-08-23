@@ -36,10 +36,10 @@ export PATH=$PATH:/usr/local/go/bin
 * curl -X GET http://<localhost or Pi@IP>:8088/status
 * return HTTP 200 OK response with this message "This server is up. Plz contact sys admin to use it!"
 
-## POST Switch ON del on GPIO N°17 (with authentication):
-* curl --user foo:bar -X POST http://<localhost or Pi@IP>:8088/admin/switchon
+## GET Switch ON del on GPIO N°17 (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchon
 * return HTTP 200 OK response with this message: "switchon has been called by: foo"
 
-## POST Switch OFF del on GPIO N°17 (with authentication):
-* curl --user foo:bar -X POST http://<localhost or Pi@IP>:8088/admin/switchoff
+## GET Switch OFF del on GPIO N°17 (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchoff
 * return HTTP 200 OK response with this message: "switchoff has been called by: foo"
