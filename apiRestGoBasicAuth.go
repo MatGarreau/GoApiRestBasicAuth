@@ -9,22 +9,25 @@ import (
 	"github.com/gin-gonic/gin"
 	"fmt"
 	"strconv"
-	"apiREST/gpioUtils"
 	"net/http"
+	"apiREST/gpioUtils"
 )
 
 func status() gin.HandlerFunc {
 	return func(ctx *gin.Context){
-		fmt.Println("This server is up. Plz contact sys admin to use it!")
+		msg := "This server is up. Plz contact sys admin to use it!"
+		fmt.Println(msg)
+		ctx.JSON(http.StatusOK, msg)
 	}
 }
 
 func switchOn() gin.HandlerFunc {
 	return func(ctx *gin.Context){
 		gpioUtils.SwitchOn(17)
-		fmt.Println("switch ON ")
 		user := ctx.MustGet(gin.AuthUserKey).(string)
-		fmt.Println("switchon has been called by:", user)
+		msg := fmt.Sprintf("switchon has been called by: %s", user)
+		fmt.Println(msg)
+		ctx.JSON(http.StatusOK, msg)
 		return
 	}
 }
@@ -32,7 +35,6 @@ func switchOn() gin.HandlerFunc {
 func switchOff() gin.HandlerFunc {
 	return func(ctx *gin.Context){
 		gpioUtils.SwitchOff(17)
-		fmt.Println("switch OFF ")
 		user := ctx.MustGet(gin.AuthUserKey).(string)
 		msg := fmt.Sprintf("switchoff has been called by: %s", user)
 		fmt.Println(msg)
