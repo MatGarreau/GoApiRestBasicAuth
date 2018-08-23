@@ -29,3 +29,17 @@ export PATH=$PATH:/usr/local/go/bin
 // $PATH must look like:
 
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin
+
+# Short description
+
+## GET Status (without authentication):
+* curl -X GET http://<localhost or Pi@IP>:8088/status
+* return HTTP 200 OK response with this message "This server is up. Plz contact sys admin to use it!"
+
+## POST Switch ON del on GPIO N°17 (with authentication):
+* curl --user foo:bar -X POST http://<localhost or Pi@IP>:8088/admin/switchon
+* return HTTP 200 OK response with this message: "switchon has been called by: foo"
+
+## POST Switch OFF del on GPIO N°17 (with authentication):
+* curl --user foo:bar -X POST http://<localhost or Pi@IP>:8088/admin/switchoff
+* return HTTP 200 OK response with this message: "switchoff has been called by: foo"
