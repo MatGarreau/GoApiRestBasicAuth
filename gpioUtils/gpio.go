@@ -6,7 +6,8 @@ package gpioUtils
  */
 
 import (
-	"github.com/mlgd/gpio"
+	//"github.com/mlgd/gpio"
+	"github.com/davecheney/gpio"
 	"fmt"
 	"time"
 )
