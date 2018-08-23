@@ -69,11 +69,11 @@ func main() {
 		"foo":    "bar",
 	}))
 
-	authorized.POST("/switchon", switchOn())
+	authorized.GET("/switchon", switchOn())
 
-	authorized.POST("/switchoff", switchOff())
+	authorized.GET("/switchoff", switchOff())
 
-	authorized.POST("/switchonpin/{pin}", SwitchOnPin())
+	authorized.GET("/switchonpin/{pin}", SwitchOnPin())
 
 	// Listen and serve on localhost:8088
 	router.Run(":8088")
