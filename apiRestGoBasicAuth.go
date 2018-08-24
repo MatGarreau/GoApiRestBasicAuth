@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"net/http"
 	"apiREST/gpioUtils"
+	"github.com/davecheney/gpio"
+
 )
 
 func status() gin.HandlerFunc {
@@ -23,8 +25,12 @@ func status() gin.HandlerFunc {
 
 func switchOn() gin.HandlerFunc {
 	return func(ctx *gin.Context){
-		gpioUtils.SwitchOn(17)
-		user := ctx.MustGet(gin.AuthUserKey).(string)
+		user := ctx.Value(gin.AuthUserKey).(string)
+		ok := gpioUtils.SwitchOn(17)
+		if ok == false {
+			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			return
+		}
 		msg := fmt.Sprintf("switchon has been called by: %s", user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
@@ -34,8 +40,13 @@ func switchOn() gin.HandlerFunc {
 
 func switchOff() gin.HandlerFunc {
 	return func(ctx *gin.Context){
-		gpioUtils.SwitchOff(17)
-		user := ctx.MustGet(gin.AuthUserKey).(string)
+		// get user name from the context
+		user := ctx.Value(gin.AuthUserKey).(string)
+		ok := gpioUtils.SwitchOff(17)
+		if ok == false {
+			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			return
+		}
 		msg := fmt.Sprintf("switchoff has been called by: %s", user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
@@ -45,12 +56,28 @@ func switchOff() gin.HandlerFunc {
 
 func SwitchOnPin() gin.HandlerFunc {
 	return func(ctx *gin.Context){
+		// get the pin number from the URL and convert it to int
 		pin, err := strconv.Atoi(ctx.Param("pin"))
 		if err != nil {
 			panic(err)
 		}
 		if 0 < pin && pin < 25 {
 			gpioUtils.SwitchOn(pin)
+		}
+		return
+	}
+}
+
+
+func SwitchOffPin() gin.HandlerFunc {
+	return func(ctx *gin.Context){
+		// get the pin number from the URL and convert it to int
+		pin, err := strconv.Atoi(ctx.Param("pin"))
+		if err != nil {
+			panic(err)
+		}
+		if 0 < pin && pin < 25 {
+			gpioUtils.SwitchOff(pin)
 		}
 		return
 	}
@@ -74,6 +101,8 @@ func main() {
 	authorized.GET("/switchoff", switchOff())
 
 	authorized.GET("/switchonpin/{pin}", SwitchOnPin())
+
+	authorized.GET("/switchoffpin/{pin}", SwitchOffPin())
 
 	// Listen and serve on localhost:8088
 	router.Run(":8088")
