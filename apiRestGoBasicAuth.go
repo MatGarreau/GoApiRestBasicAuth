@@ -8,7 +8,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"fmt"
-	"strconv"
 	"net/http"
 	"apiREST/gpioUtils"
 )
@@ -43,19 +42,6 @@ func switchOff() gin.HandlerFunc {
 	}
 }
 
-func SwitchOnPin() gin.HandlerFunc {
-	return func(ctx *gin.Context){
-		pin, err := strconv.Atoi(ctx.Param("pin"))
-		if err != nil {
-			panic(err)
-		}
-		if 0 < pin && pin < 25 {
-			gpioUtils.SwitchOn(pin)
-		}
-		return
-	}
-}
-
 func main() {
 	router := gin.New()
 
@@ -66,14 +52,12 @@ func main() {
 
 	// RouterGroup using gin.BasicAuth()
 	authorized := router.Group("/admin", gin.BasicAuth(gin.Accounts{
-		"foo":    "bar",
+		"foo":"bar",
 	}))
 
 	authorized.GET("/switchon", switchOn())
 
 	authorized.GET("/switchoff", switchOff())
-
-	authorized.GET("/switchonpin/{pin}", SwitchOnPin())
 
 	// Listen and serve on localhost:8088
 	router.Run(":8088")
