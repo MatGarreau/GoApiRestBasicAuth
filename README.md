@@ -43,3 +43,11 @@ export PATH=$PATH:/usr/local/go/bin
 ## GET Switch OFF del on GPIO N°17 (with authentication):
 * curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchoff
 * return HTTP 200 OK response with this message: "switchoff has been called by: foo"
+
+## GET Switch ON del on any GPIO (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchon/<gpio_nb>
+* return HTTP 200 OK response with this message: "switchon has been called by: foo"
+
+## GET Switch OFF del on any GPIO (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchoff/<gpio_nb>
+* return HTTP 200 OK response with this message: "switchoff has been called by: foo"
