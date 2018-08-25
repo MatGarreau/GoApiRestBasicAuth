@@ -11,8 +11,6 @@ import (
 	"strconv"
 	"net/http"
 	"apiREST/gpioUtils"
-	"github.com/davecheney/gpio"
-
 )
 
 func status() gin.HandlerFunc {
@@ -59,7 +57,8 @@ func SwitchOnPin() gin.HandlerFunc {
 		// get the pin number from the URL and convert it to int
 		pin, err := strconv.Atoi(ctx.Param("pin"))
 		if err != nil {
-			panic(err)
+			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			return
 		}
 		if 0 < pin && pin < 25 {
 			gpioUtils.SwitchOn(pin)
@@ -74,7 +73,8 @@ func SwitchOffPin() gin.HandlerFunc {
 		// get the pin number from the URL and convert it to int
 		pin, err := strconv.Atoi(ctx.Param("pin"))
 		if err != nil {
-			panic(err)
+			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			return
 		}
 		if 0 < pin && pin < 25 {
 			gpioUtils.SwitchOff(pin)
@@ -100,9 +100,9 @@ func main() {
 
 	authorized.GET("/switchoff", switchOff())
 
-	authorized.GET("/switchonpin/{pin}", SwitchOnPin())
+	authorized.GET("/switchonpin/:pin", SwitchOnPin())
 
-	authorized.GET("/switchoffpin/{pin}", SwitchOffPin())
+	authorized.GET("/switchoffpin/:pin", SwitchOffPin())
 
 	// Listen and serve on localhost:8088
 	router.Run(":8088")
