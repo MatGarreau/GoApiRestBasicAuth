@@ -13,6 +13,10 @@ import (
 	"apiREST/gpioUtils"
 )
 
+const (
+	pinParamError = "An error occurred while getting pin param"
+	gpioError     = "An error occurred while opening gpio"
+)
 func status() gin.HandlerFunc {
 	return func(ctx *gin.Context){
 		msg := "This server is up. Plz contact sys admin to use it!"
@@ -26,10 +30,10 @@ func switchOn() gin.HandlerFunc {
 		user := ctx.Value(gin.AuthUserKey).(string)
 		ok := gpioUtils.SwitchOn(17)
 		if ok == false {
-			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			ctx.JSON(http.StatusInternalServerError, gpioError)
 			return
 		}
-		msg := fmt.Sprintf("switchon has been called by: %s", user)
+		msg := fmt.Sprintf("switchon has been called by authenticated user: %s", user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
 		return
@@ -42,10 +46,10 @@ func switchOff() gin.HandlerFunc {
 		user := ctx.Value(gin.AuthUserKey).(string)
 		ok := gpioUtils.SwitchOff(17)
 		if ok == false {
-			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			ctx.JSON(http.StatusInternalServerError, gpioError)
 			return
 		}
-		msg := fmt.Sprintf("switchoff has been called by: %s", user)
+		msg := fmt.Sprintf("switchoff has been called by authenticated user: %s", user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
 		return
@@ -54,30 +58,48 @@ func switchOff() gin.HandlerFunc {
 
 func SwitchOnPin() gin.HandlerFunc {
 	return func(ctx *gin.Context){
+		user := ctx.Value(gin.AuthUserKey).(string)
 		// get the pin number from the URL and convert it to int
 		pin, err := strconv.Atoi(ctx.Param("pin"))
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			ctx.JSON(http.StatusInternalServerError, pinParamError)
 			return
 		}
 		if 0 < pin && pin < 25 {
-			gpioUtils.SwitchOn(pin)
+			ok := gpioUtils.SwitchOn(pin)
+			if ok == false {
+				ctx.JSON(http.StatusInternalServerError, gpioError)
+				return
+			}
+			msg := fmt.Sprintf("switchon pin %d has been called by authenticated user: %s", pin, user)
+			fmt.Println(msg)
+			ctx.JSON(http.StatusOK, msg)
+			return
 		}
 		return
 	}
 }
 
-
 func SwitchOffPin() gin.HandlerFunc {
 	return func(ctx *gin.Context){
+		user := ctx.Value(gin.AuthUserKey).(string)
 		// get the pin number from the URL and convert it to int
 		pin, err := strconv.Atoi(ctx.Param("pin"))
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, "An error occurred while opening gpio")
+			ctx.JSON(http.StatusInternalServerError, pinParamError)
 			return
 		}
 		if 0 < pin && pin < 25 {
-			gpioUtils.SwitchOff(pin)
+			ok:= gpioUtils.SwitchOff(pin)
+			if ok == false {
+				ctx.JSON(http.StatusInternalServerError, gpioError)
+				return
+			}
+			msg := fmt.Sprintf("switchoff pin %d has been called by authenticated user: %s", pin, user)
+			fmt.Println(msg)
+
+			ctx.JSON(http.StatusOK, msg)
+			return
 		}
 		return
 	}
