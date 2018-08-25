@@ -30,16 +30,28 @@ export PATH=$PATH:/usr/local/go/bin
 
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin
 
-# Short description
+# Short description of v_0_0_2
+This version include following improvments :
+* use a bool to manage gpioUtils functions
+* improve error messages
+* manage pin number from URL
 
 ## GET Status (without authentication):
 * curl -X GET http://<localhost or Pi@IP>:8088/status
 * return HTTP 200 OK response with this message "This server is up. Plz contact sys admin to use it!"
 
-## GET Switch ON del on GPIO N°17 (with authentication):
+### GET Switch ON del on GPIO N°17 (with authentication):
 * curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchon
 * return HTTP 200 OK response with this message: "switchon has been called by: foo"
 
-## GET Switch OFF del on GPIO N°17 (with authentication):
+### GET Switch OFF del on GPIO N°17 (with authentication):
 * curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchoff
+* return HTTP 200 OK response with this message: "switchoff has been called by: foo"
+
+### GET Switch ON del on any GPIO (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchon/<gpio_nb>
+* return HTTP 200 OK response with this message: "switchon has been called by: foo"
+
+### GET Switch OFF del on any GPIO (with authentication):
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/switchoff/<gpio_nb>
 * return HTTP 200 OK response with this message: "switchoff has been called by: foo"
