@@ -1,7 +1,12 @@
 # GoApiRestBasicAuth
 API REST for Raspberry Pi using Basic Authent written with Golang. 
-This project uses gin-gonic (https://github.com/gin-gonic/gin) and Dave Cheney GPIO library (https://github.com/davecheney/gpio)
 
+This project uses gin-gonic (https://github.com/gin-gonic/gin) 
+and Dave Cheney GPIO library (https://github.com/davecheney/gpio)
+
+It demonstrate:
+ * how to create a very simple api REST
+ * how to authenticate a user with Basic Auth
 
 # PreRequisite :
 * installation of Go
@@ -30,7 +35,8 @@ export PATH=$PATH:/usr/local/go/bin
 
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin
 
-# Short description
+# Short description of v_0_0_1
+This is the very basic first version of this project.
 
 ## GET Status (without authentication):
 * curl -X GET http://<localhost or Pi@IP>:8088/status
