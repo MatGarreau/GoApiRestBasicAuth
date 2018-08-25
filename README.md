@@ -30,7 +30,11 @@ export PATH=$PATH:/usr/local/go/bin
 
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin
 
-# Short description
+# Short description of v_0_0_2
+This version include following improvments :
+* use a bool to manage gpioUtils functions
+* improve error messages
+* manage pin number from URL
 
 ## GET Status (without authentication):
 * curl -X GET http://<localhost or Pi@IP>:8088/status
