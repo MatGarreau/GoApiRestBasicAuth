@@ -47,7 +47,7 @@ This version include following improvments :
 * curl -X GET http://<localhost or Pi@IP>:8088/status
 * return HTTP 200 OK response with this message "This server is up. Plz contact sys admin to use it!"
 
-## Get GPIO Status:
+## Get GPIO Status (with authentication):
 * curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/gpiostatus/<gpio_nb>
 * return HTTP 200 OK response with this message: "gpio status <gpio_nb> has been called by authenticated user foo. GPIO status is: <true/false>"
 
