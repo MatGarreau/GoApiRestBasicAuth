@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	pinParamError = "An error occurred while getting pin param"
-	gpioError     = "An error occurred while opening gpio"
-	pinNotAvailable = "The pin number defined in URL is not available"
+	gpioParamError   = "An error occurred while getting pin param"
+	gpioError        = "An error occurred while opening gpio"
+	gpioNotAvailable = "The gpio number defined in URL is not available"
 )
 
 func Status() gin.HandlerFunc {
@@ -26,90 +26,90 @@ func getUser(ctx *gin.Context) string {
 	return ctx.Value(gin.AuthUserKey).(string)
 }
 
-func getPinNumber(ctx *gin.Context) (pin int, err error) {
-	pin, err = strconv.Atoi(ctx.Param("pin"))
+func getGPIONumber(ctx *gin.Context) (pin int, err error) {
+	pin, err = strconv.Atoi(ctx.Param("gpio"))
 	return pin, err
 }
 
-func GetPinStatus() gin.HandlerFunc {
+func GetGPIOStatus() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user := getUser(ctx)
-		// get the pin number from the URL and convert it to int
-		pin, err := getPinNumber(ctx)
+		// get the gpio number from the URL and convert it to int
+		gpio, err := getGPIONumber(ctx)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, pinParamError)
+			ctx.JSON(http.StatusInternalServerError, gpioParamError)
 			return
 		}
-		// check the pin is available for the raspberry pi
-		if gpioUtils.IsAvailableGpio(pin) == false {
-			// pin not available
-			ctx.JSON(http.StatusBadRequest, pinNotAvailable)
+		// check the gpio is available for the raspberry pi
+		if gpioUtils.IsAvailableGpio(gpio) == false {
+			// gpio not available
+			ctx.JSON(http.StatusBadRequest, gpioNotAvailable)
 			return
 		}
-		// get pin status (true == high level - false == low level)
-		pinStatus, err := gpioUtils.PinStatus(pin)
+		// get gpio status (true == high level - false == low level)
+		gpioStatus, err := gpioUtils.GPIOStatus(gpio)
 		if err != nil {
-			// error while getting pin status
+			// error while getting gpio status
 			ctx.JSON(http.StatusInternalServerError, gpioError)
 			return
 		}
-		msg := fmt.Sprintf("pin status %d has been called by authenticated user %s. Pin status is: %t", pin, user, pinStatus)
+		msg := fmt.Sprintf("gpio status %d has been called by authenticated user %s. GPIO status is: %t", gpio, user, gpioStatus)
 		fmt.Println(msg)
-		ctx.JSON(http.StatusOK, msg) // todo : return something like {"pinID":pinNumber,"status":up} (or up/down) rather than a message
+		ctx.JSON(http.StatusOK, msg) // todo : return something like {"gpioID":gpio,"status":up} (or up/down) rather than a message
 		return
 	}
 }
 
-func SwitchOnPin() gin.HandlerFunc {
+func SwitchOnGPIO() gin.HandlerFunc {
 	return func(ctx *gin.Context){
 		user := getUser(ctx)
-		// get the pin number from the URL and convert it to int
-		pin, err := getPinNumber(ctx)
+		// get the gpio number from the URL and convert it to int
+		gpio, err := getGPIONumber(ctx)
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, pinParamError)
+			ctx.JSON(http.StatusInternalServerError, gpioParamError)
 			return
 		}
-		// check the pin is available for the raspberry pi
-		if gpioUtils.IsAvailableGpio(pin) == false {
-			// pin not available
-			ctx.JSON(http.StatusBadRequest, pinNotAvailable)
+		// check the gpio is available for the raspberry pi
+		if gpioUtils.IsAvailableGpio(gpio) == false {
+			// gpio not available
+			ctx.JSON(http.StatusBadRequest, gpioNotAvailable)
 			return
 		}
-		// switch on pin (set high level)
-		ok := gpioUtils.SwitchOn(pin)
+		// switch on gpio (set high level)
+		ok := gpioUtils.SwitchOn(gpio)
 		if ok == false {
 			ctx.JSON(http.StatusInternalServerError, gpioError)
 			return
 		}
-		msg := fmt.Sprintf("switchon pin %d has been called by authenticated user: %s", pin, user)
+		msg := fmt.Sprintf("switchon gpio %d has been called by authenticated user: %s", gpio, user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
 		return
 	}
 }
 
-func SwitchOffPin() gin.HandlerFunc {
+func SwitchOffGPIO() gin.HandlerFunc {
 	return func(ctx *gin.Context){
-		user := ctx.Value(gin.AuthUserKey).(string)
-		// get the pin number from the URL and convert it to int
-		pin, err := strconv.Atoi(ctx.Param("pin"))
+		user := getUser(ctx)
+		// get the gpio number from the URL and convert it to int
+		gpio, err := strconv.Atoi(ctx.Param("gpio"))
 		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, pinParamError)
+			ctx.JSON(http.StatusInternalServerError, gpioParamError)
 			return
 		}
-		// check the pin is available for the raspberry pi
-		if gpioUtils.IsAvailableGpio(pin) == false {
-			// pin not available
-			ctx.JSON(http.StatusBadRequest, pinNotAvailable)
+		// check the gpio is available for the raspberry pi
+		if gpioUtils.IsAvailableGpio(gpio) == false {
+			// gpio not available
+			ctx.JSON(http.StatusBadRequest, gpioNotAvailable)
 			return
 		}
-		// switch off pin (set low level)
-		ok:= gpioUtils.SwitchOff(pin)
+		// switch off gpio (set low level)
+		ok:= gpioUtils.SwitchOff(gpio)
 		if ok == false {
 			ctx.JSON(http.StatusInternalServerError, gpioError)
 			return
 		}
-		msg := fmt.Sprintf("switchoff pin %d has been called by authenticated user: %s", pin, user)
+		msg := fmt.Sprintf("switchoff gpio %d has been called by authenticated user: %s", gpio, user)
 		fmt.Println(msg)
 		ctx.JSON(http.StatusOK, msg)
 		return

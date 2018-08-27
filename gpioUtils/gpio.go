@@ -25,9 +25,9 @@ func IsAvailableGpio(gpio int) bool {
 	return ok
 }
 
-func Blink(pinToOpen, nbBlink int) {
-	// Open the port pinToOpen with mode OUT
-	pin, err := gpio.OpenPin(pinToOpen, gpio.ModeOutput)
+func Blink(gpioToOpen, nbBlink int) {
+	// Open the port gpioToOpen with mode OUT
+	pin, err := gpio.OpenPin(gpioToOpen, gpio.ModeOutput)
 	if err != nil {
 		fmt.Println("Error while opening pin: /n", err)
 		return
@@ -48,24 +48,20 @@ func Blink(pinToOpen, nbBlink int) {
 	}
 }
 
-func SwitchOn(pinToOpen int) bool {
-	pin, err := gpio.OpenPin(pinToOpen, gpio.ModeOutput)
+func SwitchOn(gpioToOpen int) bool {
+	pin, err := gpio.OpenPin(gpioToOpen, gpio.ModeOutput)
 	if err != nil {
-		//fmt.Printf("Error while opening pin %s! %s\n", pin, err)
 		return false
 	}
 	pin.Set()
 	return true
 }
 
-func SwitchOff(pinToClose int) bool {
-	pin, err := gpio.OpenPin(pinToClose, gpio.ModeOutput)
+func SwitchOff(gpioToClose int) bool {
+	pin, err := gpio.OpenPin(gpioToClose, gpio.ModeOutput)
 	if err != nil {
-		//fmt.Printf("Error while opening pin %s! %s\n", pin, err)
-		panic(err)
 		return false
 	}
-	//pin.Clear()
 	pinStatus := pin.Get()
 	if pinStatus == true {
 		pin.Clear()
@@ -73,11 +69,9 @@ func SwitchOff(pinToClose int) bool {
 	return true
 }
 
-func PinStatus(pinForStatus int) (ok bool, err error) {
-	pin, err := gpio.OpenPin(pinForStatus, gpio.ModeOutput)
+func GPIOStatus(gpioForStatus int) (ok bool, err error) {
+	pin, err := gpio.OpenPin(gpioForStatus, gpio.ModeOutput)
 	if err != nil {
-		//fmt.Printf("Error while opening pin %s! %s\n", pin, err)
-		panic(err)
 		return false, err
 	}
 	return pin.Get(), err

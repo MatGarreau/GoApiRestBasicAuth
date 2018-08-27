@@ -2,6 +2,9 @@
 API REST for Raspberry Pi using Basic Authent written with Golang. 
 This project uses gin-gonic (https://github.com/gin-gonic/gin) and Dave Cheney GPIO library (https://github.com/davecheney/gpio)
 
+This API has been written for a Raspberry Pi 3 model B v1.2
+![RPI3 GPIO](pictures/RPi3-GPIO.jpg)
+{1, 2, 3, 4, 7, 8, 9, 10, 11, 17, 18, 22, 23, 24, 25}
 
 # PreRequisite :
 * installation of Go
@@ -34,7 +37,7 @@ export PATH=$PATH:/usr/local/go/bin
 This version include following improvments :
 * remove unused functions
 * move gpio func into business
-* use PUT rather than GET to update pin status
+* use PUT rather than GET to update gpio status
 * add URL to get gpio status
 
 ## GET API Status (without authentication):
@@ -42,13 +45,13 @@ This version include following improvments :
 * return HTTP 200 OK response with this message "This server is up. Plz contact sys admin to use it!"
 
 ## Get GPIO Status:
-* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/pinstatus/<gpio_nb>
-* return HTTP 200 OK response with this message: "pin status <gpio_nb> has been called by authenticated user foo. Pin status is: <true/false>"
+* curl --user foo:bar -X GET http://<localhost or Pi@IP>:8088/admin/gpiostatus/<gpio_nb>
+* return HTTP 200 OK response with this message: "gpio status <gpio_nb> has been called by authenticated user foo. GPIO status is: <true/false>"
 
 ### PUT Switch ON del on any GPIO (with authentication):
 * curl --user foo:bar -X PUT http://<localhost or Pi@IP>:8088/admin/switchon/<gpio_nb>
-* return HTTP 200 OK response with this message: "switchon pin <gpio_nb> has been called by authenticated user: foo"
+* return HTTP 200 OK response with this message: "switchon gpio <gpio_nb> has been called by authenticated user: foo"
 
 ### PUT Switch OFF del on any GPIO (with authentication):
 * curl --user foo:bar -X PUT http://<localhost or Pi@IP>:8088/admin/switchoff/<gpio_nb>
-* return HTTP 200 OK response with this message: "switchoff pin <gpio_nb> has been called by authenticated user: foo"
+* return HTTP 200 OK response with this message: "switchoff gpio <gpio_nb> has been called by authenticated user: foo"

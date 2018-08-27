@@ -26,11 +26,11 @@ func main() {
 		"foo":"bar",
 	}))
 
-	authorized.GET("/pinstatus/:pin", business.GetPinStatus())
+	authorized.GET("/gpiostatus/:gpio", business.GetGPIOStatus())
 
-	authorized.PUT("/switchonpin/:pin", business.SwitchOnPin())
+	authorized.PUT("/switchongpio/:gpio", business.SwitchOnGPIO())
 
-	authorized.PUT("/switchoffpin/:pin", business.SwitchOffPin())
+	authorized.PUT("/switchoffgpio/:gpio", business.SwitchOffGPIO())
 
 	// Listen and serve on localhost:8088
 	router.Run(":8088")
