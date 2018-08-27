@@ -12,6 +12,19 @@ import (
 	"time"
 )
 
+// list of gpios available on the raspberry pi
+var gpios = []int {0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 17, 18, 22, 23, 24, 25}
+
+func IsAvailableGpio(gpio int) bool {
+	gpioMap := make(map[int]struct{}, len(gpios))
+	for _, pin := range gpios {
+		gpioMap[pin] = struct{}{}
+	}
+
+	_, ok := gpioMap[gpio]
+	return ok
+}
+
 func Blink(pinToOpen, nbBlink int) {
 	// Open the port pinToOpen with mode OUT
 	pin, err := gpio.OpenPin(pinToOpen, gpio.ModeOutput)
@@ -60,4 +73,12 @@ func SwitchOff(pinToClose int) bool {
 	return true
 }
 
-
+func PinStatus(pinForStatus int) (ok bool, err error) {
+	pin, err := gpio.OpenPin(pinForStatus, gpio.ModeOutput)
+	if err != nil {
+		//fmt.Printf("Error while opening pin %s! %s\n", pin, err)
+		panic(err)
+		return false, err
+	}
+	return pin.Get(), err
+}
