@@ -55,7 +55,8 @@ func GetGPIOStatus() gin.HandlerFunc {
 		}
 		msg := fmt.Sprintf("gpio status %d has been called by authenticated user %s. GPIO status is: %t", gpio, user, gpioStatus)
 		fmt.Println(msg)
-		ctx.JSON(http.StatusOK, msg) // todo : return something like {"gpioID":gpio,"status":up} (or up/down) rather than a message
+		ctx.JSON(http.StatusOK, gpioStatus) // return true or false to be compliant with Android App v0.2
+		// todo : return something like {"gpioID":gpio,"status":up} (or up/down) rather than a message
 		return
 	}
 }

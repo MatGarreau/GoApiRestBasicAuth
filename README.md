@@ -36,12 +36,9 @@ export PATH=$PATH:/usr/local/go/bin
 
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games:/usr/local/go/bin
 
-# Short description of v_0_0_3
+# Short description of v0.2
 This version include following improvments :
-* remove unused functions
-* move gpio func into business
-* use PUT rather than GET to update gpio status
-* add URL to get gpio status
+* get gpio stats return only true or false to be compliant with [Android app v0.2](https://github.com/MatGarreau/AndroidVolleyBasicAuth/tree/v0.2)
 
 ## GET API Status (without authentication):
 * curl -X GET http://<localhost or Pi@IP>:8088/status
