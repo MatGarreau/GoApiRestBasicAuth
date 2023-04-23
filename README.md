@@ -59,4 +59,5 @@ This version include following improvments :
 * curl --user foo:bar -X PUT http://<localhost or Pi@IP>:8088/admin/switchoff/<gpio_nb>
 * return HTTP 200 OK response with this message: "switchoff gpio <gpio_nb> has been called by authenticated user: foo"
 
-**This API could be consumed by this little Android App : [Android Volley Basic Auth](https://github.com/MatGarreau/AndroidVolleyBasicAuth)**
+# This API could be consumed by this little Android App : 
+[Android Volley Basic Auth](https://github.com/MatGarreau/AndroidVolleyBasicAuth)
